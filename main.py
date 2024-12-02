@@ -263,7 +263,7 @@ def fetch_and_parse_timetable(start_timestamp: int) -> dict:
     }
 
     for date, lectures in timetable.items():
-        print(date)
+        print(f'\n\n{date}')
         for i in lectures:
             print(timetable[date][i]["text"])
     return timetable
