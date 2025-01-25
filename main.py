@@ -32,26 +32,26 @@ from bs4 import BeautifulSoup
 
 #Assumes to be working with a "website-main.html" file
 def get_jsessionid(soup_main: BeautifulSoup) -> str:
-    extract = soup_main.find_all("script")[1].contents[0]
+    extract = soup_main.find_all("script")[4].contents[0]
     pattern = re.compile(r"jsessionid=([A-Z0-9]+)")
-    return(re.search(pattern, extract).group(1))
+    return re.search(pattern, extract).group(1)
 
 def get_person_id(soup_main: BeautifulSoup) -> str:
     extract = soup_main.find_all("ul")[2]
     pattern = re.compile(r"idosoby=([0-9]+)")
-    return(re.search(pattern, str(extract)).group(1))
+    return re.search(pattern, str(extract)).group(1)
 
 def get_round_number(soup_main: BeautifulSoup) -> str:
     extract = soup_main.find_all("ul")[2]
     pattern = re.compile(r"nrtury=([0-9]+)")
-    return(re.search(pattern, str(extract)).group(1))
+    return re.search(pattern, str(extract)).group(1)
 
 
 #Assumes to be working with a "website-timetable.html" file
 def get_semester_id(soup_timetable: BeautifulSoup) -> str:
     text = soup_timetable.find_all("div")[50].find("script").contents[0]
     pattern = re.compile(r"idsemestru : (\d+),")
-    return(re.search(pattern, text).group(1))
+    return re.search(pattern, text).group(1)
 
 class Tile():
     def __init__(self, lecture: str):
