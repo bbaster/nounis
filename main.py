@@ -177,16 +177,14 @@ response = requests.post(
     data=data,
 )
 
-with open("website-main.html", "w+") as file:
-    file.write(response.text)
-    file.seek(0)
-    soup_main = BeautifulSoup(file, "lxml")
-    if soup_main.find_all(class_="bad-pasword-wiki"):
-        print("Wrong login or password!", file=sys.stderr)
-        file.truncate(0)
-        exit(1)
-    else:
-        print("Authentication successful!", file=sys.stderr)
+
+soup_main = BeautifulSoup(response.text, "lxml")
+if soup_main.find_all(class_="bad-pasword-wiki"):
+    print("Wrong login or password!", file=sys.stderr)
+    exit(1)
+else:
+    print("Authentication successful!", file=sys.stderr)
+
 
 cookies["JSESSIONID"] = get_jsessionid(soup_main)
 headers["Referer"] = f"https://{domain}/{school_code}-stud-app/ledge/view/stud.schedule.SchedulePage?idosoby={get_person_id(soup_main)}&nrtury={get_round_number(soup_main)}"
@@ -201,10 +199,7 @@ response = requests.post(
     data=data,
 )
 
-with open("website-timetable.html", "w+") as file:
-    file.write(response.text)
-    file.seek(0)
-    soup_timetable = BeautifulSoup(file, "lxml")
+soup_timetable = BeautifulSoup(response.text, "lxml")
 
 headers["X-Requested-With"] = "XMLHttpRequest"
 headers["Sec-Fetch-Dest"] = "empty"
@@ -233,10 +228,7 @@ def fetch_and_parse_timetable(start_timestamp: int) -> dict:
         headers=headers,
         data=json.dumps(data)
     )
-    
-    with open("timetable.json", "w+") as file:
-        file.write(json.dumps(response.text))
-    
+  
     lectures=json.loads(response.text)
 
     for i in range(int(lectures["returnedValue"]["numRows"])-1, -1, -1):
